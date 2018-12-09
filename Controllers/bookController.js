@@ -4,10 +4,19 @@ let bookController = function(Book){
     let post = function (req, res) {
 
         let book = new Book(req.body);                          //Create a new mangoose-instance of book-model
-        book.save();                                            //Saves Book made in Postman in mango-db
-        res.status(201).send(book);                             //Sending book back so book-id is available to the client who called our API.                                                    
-                                                                //Send status & book back. 201 means created
+        
+        if (!req.body.title) {                                  //Als titel niet bestaat in req.body
+            
+            res.status(400);
+            res.send('Title is required.');
+            
+        }else{                                                  //Als titel WEL bestaat in req.body
 
+            book.save();                                            //Saves Book made in Postman in mango-db
+            res.status(201);                                        //Send status 201 means created
+            res.send(book);                                         //Sending book back so book-id is available to the client who called our API.                                                    
+       
+        }                                                  
     }
 
     //Get-Functie
@@ -35,7 +44,7 @@ let bookController = function(Book){
             else
                 res.json(books);                               //Stuur terug een json object.                        
         });
-        
+
     }
 
     //Return back the fucntions you want to use;
