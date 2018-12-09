@@ -94,8 +94,34 @@ let routes = function(Book){
             req.book.author = req.body.author;
             req.book.genre = req.body.author;
             req.book.read = req.body.read;
-            book.save();                                                    //Save the changes
-            res.json(req.book);                                             //Return new updated book.
+            
+            //Save upgedate boek
+            req.book.save(function (err) {
+                if (err)                                                    //Als er een error is...
+                    res.status(500).send(err);
+                else {                                                      //Anders...
+                    res.json(req.book);                                     //Update nieuwe book...
+                }
+            })
+        })
+
+        //Update alleen delen van de item.
+        .patch(function(req,res){
+            if(req.body._id)                                                //Als er een nieuwe ID word geupdate
+                delete req.body._id;                                        //Delete de nieuwe ID update.
+
+            for (var p in req.body) {                                       //Loop die door alle onderdelen in de item gaat.
+                req.book[p] = req.body[p];                                  //VB: Nieuwe ingevoerde boek titel word nieuwe book titel.
+            }
+
+            //Save upgedate boek
+            req.book.save(function(err){
+                if (err)                                                    //Als er een error is...
+                    res.status(500).send(err);
+                else{                                                       //Anders...
+                    res.json(req.book);                                     //Update nieuwe book...
+                }
+            });
         });
         
     return bookRouter;
