@@ -59,36 +59,45 @@ let routes = function(Book){
                     res.json(books);                                        //Stuur terug een json object.                        
             });
         });
-            
+
+    /*
+    Middelware voor bookid-Route;
+    De request van de client gaat eerst door het 
+    middelware heen en komt dan pas bij de server aan. 
+    */
+    bookRouter.use('/:bookId', function(req,res,next){                      //Next = ga door naar de volgende middelware (als het er is).
+        
+        //De waarde van 'bookId' staat in de URL
+        Book.findById(req.params.bookId, function (err, book) {            //Vind het boek bij ID.
+            if (err)
+                res.status(500).send(err);                                  //Rest van de code word niet gelezen.
+            else if (book) {                                                //Als het boek bestaat...
+                req.book = book;                                            //Voeg het boek toe aan de request
+                next()                                                      //Ga door naar de volgende middelware/lijnen code.
+            }
+            else{                                                           //Boek niet gevonden?                                                
+                res.status(404).send("no book found");                      //Rest van de code word niet gelezen.
+            }
+        });
+    });
 
     //Route zodat je boeken op ID kunt vinden in de URL
     bookRouter.route('/:bookId')
         .get(function (req, res) {
-
-            //De waarde van 'bookId' staat in de URL
-            Book.findById(req.params.bookId, function (err, book) {            //Vind het boek bij ID.
-                if (err)
-                    res.status(500).send(err);
-                else
-                    res.json(book);
-            });
+            res.json(req.book);                                             
         })
 
         //Update alle onderdelen in een item in MangoDB database
-        .put(function(req,res){
-            Book.findById(req.params.bookId, function(err,book){
-                if(err)                                                     //Error?
-                    res.status(500).send(err);
-                else                                                        //Verander opgeslagen data naar request data
-                    //Id word niet upgedate of verandert.
-                    book.title = req.body.title;
-                    book.author = req.body.author;
-                    book.genre = req.body.author;
-                    book.read = req.body.read;
-                    book.save();
-                    res.json(book);
-            });
+        .put(function(req,res){                                     
+            //Id word niet upgedate of verandert.
+            req.book.title = req.body.title;
+            req.book.author = req.body.author;
+            req.book.genre = req.body.author;
+            req.book.read = req.body.read;
+            book.save();                                                    //Save the changes
+            res.json(req.book);                                             //Return new updated book.
         });
+        
     return bookRouter;
 };
 
