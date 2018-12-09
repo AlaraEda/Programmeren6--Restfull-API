@@ -102,7 +102,7 @@ let routes = function(Book){
                 else {                                                      //Anders...
                     res.json(req.book);                                     //Update nieuwe book...
                 }
-            })
+            });
         })
 
         //Update alleen delen van de item.
@@ -120,6 +120,17 @@ let routes = function(Book){
                     res.status(500).send(err);
                 else{                                                       //Anders...
                     res.json(req.book);                                     //Update nieuwe book...
+                }
+            });
+        })
+
+        //Delete Item
+        .delete(function(req,res){
+            req.book.remove(function(err){                                  //Welk boek ook gevonden is in onze middelware -> remove it.
+                if(err)                                                     //Als boek deleten niet gelukt is...
+                    req.status(500).send(err);
+                else{                                                       //Als boek deleten WEL gelukt is...                                         
+                    res.status(204).send('Removed');
                 }
             });
         });
