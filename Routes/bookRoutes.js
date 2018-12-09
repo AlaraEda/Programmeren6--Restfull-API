@@ -14,52 +14,12 @@ let routes = function(Book){
     zoek je naar het boek, neem je de resultaten
     en stuur je dat terug naar je browsor.
     */
+    let bookController = require('../controllers/bookController')(Book)                     //Book model word meegestuurd naar controller.
+    
     bookRouter.route('/')
-        //Post een nieuwe item.
-        .post(function (req, res) {
-            //Create a new mangoose-instance of book-model
-            var book = new Book(req.body);
-
-            //Body parser = middleware die de body leest en het stopt in een json object
-
-            //Saves Book made in Postman in mango-db
-            book.save();
-
-            //Sending book back so book-id is available to the client who called our API.
-            res.status(201).send(book);                                                     //Send status & book back. 201 means created
-
-        })
-
-        //Get-Method: Express roept deze functie op als get-route '/Books' word opgeroepen;
-        .get(function (req, res) {
-            //let responseJson = {hello: "This is my api"};         //Data sending back
-
-            /*
-            Filter boeken op genre of author
-            door in de URL te typen:
-            books?author=Jules Verne
-            books?genre
-            */
-            let query = {};
-
-            //Check if de request(die je in URL typt) query bestaat
-            //Dus als je bullshit typt in URL dan filtert het niet.
-            if (req.query.genre) {
-                //Bestaat?
-                query.genre = req.query.genre;
-            }
-
-            //Book is onze model, vind het en doe een callback.
-            //Zoek ondertussen ook naar de query in dat boek;
-            Book.find(query, function (err, books) {
-                if (err)                                             //Als er een Error aanwezig is...
-                    res.status(500).send(err);                      //Stuur de 500-error terug met een message die de error heeft.         
-                //console.log(err)
-                else
-                    res.json(books);                                        //Stuur terug een json object.                        
-            });
-        });
-
+        .post(bookController.post)                                                          //Roep functie post op van controllers.
+        .get(bookController.get);                                                           //Roep functie get op van controllers. 
+        
     /*
     Middelware voor bookid-Route;
     De request van de client gaat eerst door het 
