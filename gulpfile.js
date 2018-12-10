@@ -4,14 +4,16 @@ te typen hoef je nu alleen"gulp" te typen.*/
 
 let gulp = require('gulp'),
     nodemon = require('gulp-nodemon'),          //npm install plug-in
-    gulpMocha = require('gulp-mocha');          //Mocha running in gulp
+    gulpMocha = require('gulp-mocha'),          //Mocha running in gulp
+    env = require ('gulp-env'),
+    supertest = require('supertest');
 
 //Use default-task to execute our nodemon-plog in
 gulp.task('default', function(){
 
     //Takes a json object to configure itself.
     nodemon({
-        
+
         script: 'app.js',                       //Main-page
         ext: 'js',                              //Let op Js extention
         env: {
@@ -30,9 +32,12 @@ gulp.task('default', function(){
 });
 
 //Gulp Task om gulpMocha te gebruiken.
-gulp.task('test', function(){//Functie heet "test"
-  gulp.src('tests/*.js', {read: false})         //Gebruik mocha op al onze test files.
-    .pipe(gulpMocha({reporter: 'nyan'}))
+gulp.task('test', function(){                   //Functie heet "test"
+    
+    env({ vars: { ENV: 'Test' } });             //Set-Up environment naar test
+    gulp.src('tests/*.js', {read: false})       //Gebruik mocha op al onze test files.
+        .pipe(gulpMocha({reporter: 'nyan'}))
+        
 });
 
 
