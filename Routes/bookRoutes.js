@@ -44,7 +44,17 @@ let routes = function(Book){
     //Route zodat je boeken op ID kunt vinden in de URL
     bookRouter.route('/:bookId')
         .get(function (req, res) {
-            res.json(req.book);                                             
+            /*
+            Zorgt ervoor dat wanneer je op een boekID zit 
+            je kan filteren op boeken met dezelfde genre
+            */
+            var returnBook = req.book.toJSON();
+
+            returnBook.links = {};
+            //Creeert genre-link
+            var newLink = 'http://' + req.headers.host + '/api/books/?genre=' + returnBook.genre;
+            returnBook.links.FilterByThisGenre = newLink.replace(' ','%20');  //Als de genre twee woorden is dan komt in de link inplaats van een spatie een %20. 
+            res.json(returnBook);                                             //Return the book + links                                     
         })
 
         //Update alle onderdelen in een item in MangoDB database

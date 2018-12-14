@@ -41,8 +41,21 @@ let bookController = function(Book){
             if (err)                                            //Als er een Error aanwezig is...
                 res.status(500).send(err);                      //Stuur de 500-error terug met een message die de error heeft.         
             //console.log(err)
-            else
-                res.json(books);                               //Stuur terug een json object.                        
+            else {
+
+                let returnBooks = [];
+                //ForEach book in the list...
+                books.forEach(function (element, index, array) {
+                    //Change element in model
+                    var newBook = element.toJSON();
+                    //Add hyperlinks op onze objecten.
+                    newBook.links =  {};
+                    //                              localhost:8000                   
+                    newBook.links.self = 'http://' + req.headers.host + '/api/books/' + newBook._id         //Elke boek in onze return geeft ons een boek plus de link om naar de individuele boek te gaan.
+                    returnBooks.push(newBook)                   //"Each" item in de array zal een nieuwe boek stoppen in de returnBooks-Array/
+                });
+                res.json(returnBooks);                          //Stuur terug alle json objecten + links                        
+            }
         });
 
     }
