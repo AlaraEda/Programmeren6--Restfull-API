@@ -48,12 +48,13 @@ let routes = function(Book){
             Zorgt ervoor dat wanneer je op een boekID zit 
             je kan filteren op boeken met dezelfde genre
             */
-            var returnBook = req.book.toJSON();
+            let returnBook = req.book.toJSON();
 
             returnBook.links = {};
             //Creeert genre-link
-            var newLink = 'http://' + req.headers.host + '/api/books/?genre=' + returnBook.genre;
+            let newLink = 'http://' + req.headers.host + '/api/books/?genre=' + returnBook.genre;
             returnBook.links.FilterByThisGenre = newLink.replace(' ','%20');  //Als de genre twee woorden is dan komt in de link inplaats van een spatie een %20. 
+            
             res.json(returnBook);                                             //Return the book + links                                     
         })
 

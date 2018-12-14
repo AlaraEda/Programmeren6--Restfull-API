@@ -54,7 +54,42 @@ let bookController = function(Book){
                     newBook.links.self = 'http://' + req.headers.host + '/api/books/' + newBook._id         //Elke boek in onze return geeft ons een boek plus de link om naar de individuele boek te gaan.
                     returnBooks.push(newBook)                   //"Each" item in de array zal een nieuwe boek stoppen in de returnBooks-Array/
                 });
-                res.json(returnBooks);                          //Stuur terug alle json objecten + links                        
+                
+                //Om het netjes eruit te laten zien
+                let response = {
+                    items: returnBooks,
+                    _links: {
+                        self: {
+                            href: "http://localhost:8000"
+                        }
+                    },
+                    pagination: {
+                        currentPage: 1,
+                        currentItems: 5,
+                        totalPages: 1,
+                        totalItems: 5,
+                        _links: {
+                            first: {
+                                page: 1,
+                                href: "http://amycmgt.tk/projects/?start=1&limit=5"
+                            },
+                            last: {
+                                page: null,
+                                href: "http://amycmgt.tk/projects/?start=NaN&limit=NaN"
+                            },
+                            previous: {
+                                page: 10000,
+                                href: "http://amycmgt.tk/projects/?start=NaN&limit=NaN"
+                            },
+                            next: {
+                                page: null,
+                                href: "http://amycmgt.tk/projects/?start=NaN&limit=NaN"
+                            }
+                        }
+                    }
+                }
+
+            res.json(response);                          //Stuur terug alle json objecten + links                        
             }
         });
 
