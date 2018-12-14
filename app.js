@@ -12,7 +12,7 @@ if(process.env.ENV == 'Test')                                   //Als environmen
                                                                 //Als bookAPI niet bestaat dan creeert hij het nu gewoon zelf.
 else{
     db = mongoose.connect('mongodb://localhost/bookAPI');
-}
+};
 let Book = require('./models/bookModel');                       //Roep Model file op
 let app = express();                                            //Execute Express()
 let port = process.env.PORT || 3000;                            //Als er geen process.env.port (staat in gulpfile.js) aanwezig is doe port 3000. 
