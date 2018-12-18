@@ -41,6 +41,7 @@ let routes = function(Book){
         });
     });
 
+
     //Route zodat je boeken op ID kunt vinden in de URL
     bookRouter.route('/:bookId')
         .get(function (req, res) {
@@ -50,11 +51,15 @@ let routes = function(Book){
             */
             let returnBook = req.book.toJSON();
 
-            returnBook.links = {};
+            returnBook._links = {};
+            returnBook._links.self = {};
             //Creeert genre-link
-            let newLink = 'http://' + req.headers.host + '/api/books/?genre=' + returnBook.genre;
-            returnBook.links.FilterByThisGenre = newLink.replace(' ','%20');  //Als de genre twee woorden is dan komt in de link inplaats van een spatie een %20. 
+            let newLink = 'http://' + req.headers.host + '/api/books/' + returnBook._id;
+            returnBook._links.self.href = newLink.replace(' ','%20');  //Als de genre twee woorden is dan komt in de link inplaats van een spatie een %20. 
             
+            returnBook._links.collection = {};
+            returnBook._links.collection.href = 'http://' + req.headers.host + '/api/books'
+
             res.json(returnBook);                                             //Return the book + links                                     
         })
 

@@ -15,7 +15,25 @@ else{
 }
 let Book = require('./models/bookModel');                       //Roep Model file op
 let app = express();                                            //Execute Express()
-let port = process.env.PORT || 3000;                            //Als er geen process.env.port (staat in gulpfile.js) aanwezig is doe port 3000. 
+let port = 8000;                            //Als er geen process.env.port (staat in gulpfile.js) aanwezig is doe port 3000. 
+console.log("This is the chosen port:" + port);
+
+app.options("/api/books/", function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')             //* Betekent alles
+    res.header('Allow', 'GET,POST,OPTIONS')
+    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With')
+    res.send(200);
+});
+
+app.options("/api/books/:bookId", function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');             //* Betekent alles
+
+    res.header('Access-Control-Allow-Methods', 'GET,PUT, OPTIONS, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.send(200);
+});
+
 
 //Looks at the body of code and searches for Json
 //Als er json is dan add hij het aan req.body.
@@ -39,10 +57,11 @@ app.get('/', function(req, res){
                                                                 //res.send stuurt alleen een string van tekst.
 });
 
+
 //App.listen with the port number + a call back function.
 app.listen(port, function(){
     //Letting know that the app has started listening.
-    console.log("Gulp is running my app on Port:" + port );
+    console.log("API is running my app on Port:" + port );
 });
 
 

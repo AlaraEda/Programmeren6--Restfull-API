@@ -15,7 +15,6 @@ let bookController = function(Book){
             book.save();                                            //Saves Book made in Postman in mango-db
             res.status(201);                                        //Send status 201 means created
             res.send(book);                                         //Sending book back so book-id is available to the client who called our API.                                                    
-       
         }                                                  
     }
 
@@ -49,10 +48,17 @@ let bookController = function(Book){
                     //Change element in model
                     var newBook = element.toJSON();
                     //Add hyperlinks op onze objecten.
-                    newBook.links =  {};
+                    newBook._links =  {};
+
+                    newBook._links.self = {};
+
                     //                              localhost:8000                   
-                    newBook.links.self = 'http://' + req.headers.host + '/api/books/' + newBook._id         //Elke boek in onze return geeft ons een boek plus de link om naar de individuele boek te gaan.
-                    returnBooks.push(newBook)                   //"Each" item in de array zal een nieuwe boek stoppen in de returnBooks-Array/
+                    newBook._links.self.href = 'http://' + req.headers.host + '/api/books/' + newBook._id         //Elke boek in onze return geeft ons een boek plus de link om naar de individuele boek te gaan.
+                    
+                    newBook._links.collection = {};
+                    newBook._links.collection.href = 'http://'+ req.headers.host + '/api/books'
+                    
+                    returnBooks.push(newBook)                   //"Each" item in de array zal een nieuwe boek stoppen in de returnBooks-Array
                 });
                 
                 //Om het netjes eruit te laten zien
@@ -60,7 +66,7 @@ let bookController = function(Book){
                     items: returnBooks,
                     _links: {
                         self: {
-                            href: "http://localhost:8000"
+                            href: 'http://' + req.headers.host + '/api/books'
                         }
                     },
                     pagination: {
