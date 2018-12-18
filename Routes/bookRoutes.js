@@ -64,21 +64,32 @@ let routes = function(Book){
         })
 
         //Update alle onderdelen in een item in MangoDB database
-        .put(function(req,res){                                     
-            //Id word niet upgedate of verandert.
-            req.book.title = req.body.title;
-            req.book.author = req.body.author;
-            req.book.genre = req.body.author;
-            req.book.read = req.body.read;
-            
-            //Save upgedate boek
-            req.book.save(function (err) {
-                if (err)                                                    //Als er een error is...
-                    res.status(500).send(err);
-                else {                                                      //Anders...
-                    res.json(req.book);                                     //Update nieuwe book...
+        .put(function(req,res){
+            Book.findById(req.params.bookId, function (err, book) {            //Vind het boek bij ID.
+                if (!req.body.title || !req.body.author || !req.body.genre ||!req.body.read){
+                
+                   res.status(400).send(err);
+                   
                 }
-            });
+                else{
+            
+                    //Id word niet upgedate of verandert.
+                    book.title = req.body.title;
+                    book.author = req.body.author;
+                    book.genre = req.body.author;
+                    book.read = req.body.read;
+                
+                    //Save upgedate boek
+                    book.save(function (err) {
+                        if (err)                                                    //Als er een error is...
+                            res.status(500).send(err)
+                        else {                                                      //Anders...
+                            res.json(req.book)                                     //Update nieuwe book...
+                        }
+                    
+                    });
+                }
+            })
         })
 
         //Update alleen delen van de item.

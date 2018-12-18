@@ -10,7 +10,8 @@ let bookModel = new Schema({
     },
     author: {type: String},
     genre: {type: String},
-    read: {type: Boolean, default:false}                   //Is het boek al gelezen?
+    read: {type: String, default:false}                   // Is het boek al gelezen? 
+                                                          // Haal hier de boolean weg zodat bas z'n checker hem leuk vind.
 });
 
 //Laden deze model naar Mongoose en noemen het Book en geven het de variabele bookModel mee.

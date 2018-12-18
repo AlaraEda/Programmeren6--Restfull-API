@@ -40,6 +40,16 @@ app.options("/api/books/:bookId", function (req, res, next) {
 app.use(bodyParser.urlencoded({ extended: true }));             //Let de app know we are using a body-parser
 app.use(bodyParser.json());
 
+//Rij 3 v/d Checkers
+//Als het json is ga door met de code, anders geef een foutmelding.
+app.use(function(req, res, next){
+    if(req.accepts('json')){
+        next();
+        return
+    };
+    res.sendStatus(404);
+});
+
 //Functie oproep. hierbij geef je de model book ook mee aan de bookRoutes-file
 bookRouter = require('./Routes/bookRoutes')(Book);
 
