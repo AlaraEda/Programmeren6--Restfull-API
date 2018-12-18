@@ -10,7 +10,10 @@ let bookModel = new Schema({
     },
     author: {type: String},
     genre: {type: String},
-    read: {type: String, default:false}                   // Is het boek al gelezen? 
+    read: {type: String, default:false},  
+    _links:{self:{href:{type:String}},
+            collection:{href:{type:String}}}
+                     // Is het boek al gelezen? 
                                                           // Haal hier de boolean weg zodat bas z'n checker hem leuk vind.
 });
 
