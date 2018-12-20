@@ -28,12 +28,11 @@ app.options("/api/books/", function (req, res, next) {
 
 app.options("/api/books/:bookId", function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');             //* Betekent alles
-
     res.header('Access-Control-Allow-Methods', 'GET,PUT, OPTIONS, DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.header('Allow', 'GET,PUT, OPTIONS, DELETE');
     res.send(200);
 });
-
 
 //Looks at the body of code and searches for Json
 //Als er json is dan add hij het aan req.body.
@@ -43,6 +42,8 @@ app.use(bodyParser.json());
 //Rij 3 v/d Checkers
 //Als het json is ga door met de code, anders geef een foutmelding.
 app.use(function(req, res, next){
+    res.header('Access-Control-Allow-Origin', '*'); 
+    res.header('Access-Control-Allow-Headers', 'Content - Type, Authorization, Content - Length, X - Requested - With'); 
     if(req.accepts('json')){
         next();
         return
