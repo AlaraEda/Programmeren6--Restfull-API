@@ -18,6 +18,7 @@ let app = express();                                            //Execute Expres
 let port = 8000;                            //Als er geen process.env.port (staat in gulpfile.js) aanwezig is doe port 3000. 
 console.log("This is the chosen port:" + port);
 
+//Optie om iets binnen te krijgen, aan te passen of te uploaden.
 app.options("/api/quotes/", function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')             //* Betekent alles
     res.header('Allow', 'GET,POST,OPTIONS')
