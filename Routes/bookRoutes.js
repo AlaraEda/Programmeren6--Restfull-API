@@ -66,7 +66,7 @@ let routes = function(Book){
         //Update alle onderdelen in een item in MangoDB database
         .put(function(req,res){
             Book.findById(req.params.bookId, function (err, book) {            //Vind het boek bij ID.
-                if (!req.body.title || !req.body.author || !req.body.genre ||!req.body.read){
+                if (!req.body.quote || !req.body.author || !req.body.genre) {   //||!req.body.read
                 
                    res.status(400).send(err);
                    
@@ -74,10 +74,10 @@ let routes = function(Book){
                 else{
             
                     //Id word niet upgedate of verandert.
-                    book.title = req.body.title;
+                    book.quote = req.body.quote;
                     book.author = req.body.author;
                     book.genre = req.body.author;
-                    book.read = req.body.read;
+                    //book.read = req.body.read;
                 
                     //Save upgedate boek
                     book.save(function (err) {

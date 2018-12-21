@@ -5,12 +5,12 @@ let mongoose = require('mongoose'),
 
 //Lay-out in Json hoe een boek eruit ziet
 let bookModel = new Schema({
-    title:{
+    quote:{
         type: String
     },
     author: {type: String},
     genre: {type: String},
-    read: {type: String, default:false},  
+    //read: {type: String, default:false},  
     _links:{self:{href:{type:String}},
             collection:{href:{type:String}}}
                      // Is het boek al gelezen? 

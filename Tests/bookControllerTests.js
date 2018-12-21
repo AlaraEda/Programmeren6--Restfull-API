@@ -14,7 +14,7 @@ let should = require('should'),
 
 describe('Book Controller Test;', function(){
     describe('Post', function(){                        //Describe post method of book controller
-        it('Should not allow an empty title on post', function(){
+        it('Should not allow an empty quote on post', function(){
             let Book = function(book){
                 this.save = function(){};
             }
@@ -46,7 +46,7 @@ describe('Book Controller Test;', function(){
                 met een slechte status, dit is wat de status was. 
             */
 
-            res.send.calledWith('Title is required.').should.equal(true);
+            res.send.calledWith('Quote is required.').should.equal(true);
         })
     })
 })

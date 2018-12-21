@@ -5,10 +5,10 @@ let bookController = function (Book) {
 
         let book = new Book(req.body);                          //Create a new mangoose-instance of book-model
 
-        if (!req.body.title) {                                  //Als titel niet bestaat in req.body
+        if (!req.body.quote) {                                  //Als titel niet bestaat in req.body
 
             res.status(400);
-            res.send('Title is required.');
+            res.send('Quote is required.');
 
         } else {                                                  //Als titel WEL bestaat in req.body
             book._links.self.href = 'http://' + req.headers.host + '/api/books/' + book._id
