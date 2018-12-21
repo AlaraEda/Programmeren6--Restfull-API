@@ -1,7 +1,7 @@
 /*
 Gulp Test
 
-Test code voor bookcontroller
+Test code voor quotecontroller
 npm install gulp-mocha should sinon --save
      - Gulp is wat we gebruiken om onze mocha test te runnen.
      - should is een "assertion framework"
@@ -13,12 +13,12 @@ let should = require('should'),
     sinon = require('sinon');
 
 describe('Quote Controller Test;', function(){
-    describe('Post', function(){                        //Describe post method of quote controller
+    describe('Post', function(){                                                                    //Describe post method of quote controller
         it('Should not allow an empty quote on post', function(){
             let Quote = function(quote){
                 this.save = function(){};
             }
-            let req = {                                             //Request has to contain a body with data
+            let req = {                                                                             //Request has to contain a body with data
                 body: {
                     author: 'Jon'
                 }
@@ -31,7 +31,7 @@ describe('Quote Controller Test;', function(){
             }
 
             let quoteController = require('../controllers/quoteController')(Quote);
-            quoteController.post(req,res);                                           //We versturen een req zonder titel
+            quoteController.post(req,res);                                                          //We versturen een req zonder titel
 
             //Check if status is called and with what. 
             res.status.calledWith(400).should.equal(true, 'Bad status ' + res.status.args[0][0]);

@@ -1,4 +1,4 @@
-//Json object that lays out what a book object looks like.
+//Json object that lays out what a quote object looks like.
 
 let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
@@ -13,9 +13,7 @@ let quoteModel = new Schema({
     //read: {type: String, default:false},  
     _links:{self:{href:{type:String}},
             collection:{href:{type:String}}}
-                     // Is het boek al gelezen? 
-                                                          // Haal hier de boolean weg zodat bas z'n checker hem leuk vind.
 });
 
-//Laden deze model naar Mongoose en noemen het Book en geven het de variabele quoteModel mee.
+//Laden deze model naar Mongoose en noemen het Quote en geven het de variabele quoteModel mee.
 module.exports=mongoose.model('Quote', quoteModel);
