@@ -3,9 +3,9 @@ let express = require('express');
 //return value voor de module that exports routes
 
 //Functie heeft "Book" meegekregen van app.js
-let routes = function(Book){
+let routes = function(Quote){
     //A better way to create Routes
-    let bookRouter = express.Router();                              //Router instance
+    let quoteRouter = express.Router();                              //Router instance
 
     /*
     Book Route for API;
@@ -14,58 +14,58 @@ let routes = function(Book){
     zoek je naar het boek, neem je de resultaten
     en stuur je dat terug naar je browsor.
     */
-    let bookController = require('../controllers/bookController')(Book)                     //Book model word meegestuurd naar controller.
+    let quoteController = require('../controllers/quoteController')(Quote)                     //Book model word meegestuurd naar controller.
     
-    bookRouter.route('/')
-        .post(bookController.post)                                                          //Roep functie post op van controllers.
-        .get(bookController.get);                                                           //Roep functie get op van controllers. 
+    quoteRouter.route('/')
+        .post(quoteController.post)                                                          //Roep functie post op van controllers.
+        .get(quoteController.get);                                                           //Roep functie get op van controllers. 
         
     /*
     Middelware voor bookid-Route;
     De request van de client gaat eerst door het 
     middelware heen en komt dan pas bij de server aan. 
     */
-    bookRouter.use('/:bookId', function(req,res,next){                      //Next = ga door naar de volgende middelware (als het er is).
+    quoteRouter.use('/:quoteId', function(req,res,next){                      //Next = ga door naar de volgende middelware (als het er is).
         
         //De waarde van 'bookId' staat in de URL
-        Book.findById(req.params.bookId, function (err, book) {            //Vind het boek bij ID.
+        Quote.findById(req.params.quoteId, function (err, quote) {            //Vind het boek bij ID.
             if (err)
                 res.status(500).send(err);                                  //Rest van de code word niet gelezen.
-            else if (book) {                                                //Als het boek bestaat...
-                req.book = book;                                            //Voeg het boek toe aan de request
+            else if (quote) {                                                //Als het boek bestaat...
+                req.quote = quote;                                            //Voeg het boek toe aan de request
                 next()                                                      //Ga door naar de volgende middelware/lijnen code.
             }
             else{                                                           //Boek niet gevonden?                                                
-                res.status(404).send("no book found");                      //Rest van de code word niet gelezen.
+                res.status(404).send("no quote found");                      //Rest van de code word niet gelezen.
             }
         });
     });
 
 
-    //Route zodat je boeken op ID kunt vinden in de URL
-    bookRouter.route('/:bookId')
+    //Route zodat je quotes op ID kunt vinden in de URL
+    quoteRouter.route('/:quoteId')
         .get(function (req, res) {
             /*
             Zorgt ervoor dat wanneer je op een boekID zit 
             je kan filteren op boeken met dezelfde genre
             */
-            let returnBook = req.book.toJSON();
+            let returnQuote = req.quote.toJSON();
 
-            returnBook._links = {};
-            returnBook._links.self = {};
+            returnQuote._links = {};
+            returnQuote._links.self = {};
             //Creeert genre-link
-            let newLink = 'http://' + req.headers.host + '/api/books/' + returnBook._id;
-            returnBook._links.self.href = newLink.replace(' ','%20');  //Als de genre twee woorden is dan komt in de link inplaats van een spatie een %20. 
+            let newLink = 'http://' + req.headers.host + '/api/quotes/' + returnQuote._id;
+            returnQuote._links.self.href = newLink.replace(' ','%20');  //Als de genre twee woorden is dan komt in de link inplaats van een spatie een %20. 
             
-            returnBook._links.collection = {};
-            returnBook._links.collection.href = 'http://' + req.headers.host + '/api/books'
+            returnQuote._links.collection = {};
+            returnQuote._links.collection.href = 'http://' + req.headers.host + '/api/quotes'
 
-            res.json(returnBook);                                             //Return the book + links                                     
+            res.json(returnQuote);                                             //Return the book + links                                     
         })
 
         //Update alle onderdelen in een item in MangoDB database
         .put(function(req,res){
-            Book.findById(req.params.bookId, function (err, book) {            //Vind het boek bij ID.
+            Quote.findById(req.params.quoteId, function (err, quote) {            //Vind het boek bij ID.
                 if (!req.body.quote || !req.body.author || !req.body.genre) {   //||!req.body.read
                 
                    res.status(400).send(err);
@@ -74,17 +74,17 @@ let routes = function(Book){
                 else{
             
                     //Id word niet upgedate of verandert.
-                    book.quote = req.body.quote;
-                    book.author = req.body.author;
-                    book.genre = req.body.author;
+                    quote.quote = req.body.quote;
+                    quote.author = req.body.author;
+                    quote.genre = req.body.author;
                     //book.read = req.body.read;
                 
                     //Save upgedate boek
-                    book.save(function (err) {
+                    quote.save(function (err) {
                         if (err)                                                    //Als er een error is...
                             res.status(500).send(err)
                         else {                                                      //Anders...
-                            res.json(req.book)                                     //Update nieuwe book...
+                            res.json(req.quote)                                     //Update nieuwe book...
                         }
                     
                     });
@@ -98,22 +98,22 @@ let routes = function(Book){
                 delete req.body._id;                                        //Delete de nieuwe ID update.
 
             for (var p in req.body) {                                       //Loop die door alle onderdelen in de item gaat.
-                req.book[p] = req.body[p];                                  //VB: Nieuwe ingevoerde boek titel word nieuwe book titel.
+                req.quote[p] = req.body[p];                                  //VB: Nieuwe ingevoerde boek titel word nieuwe book titel.
             }
 
             //Save upgedate boek
-            req.book.save(function(err){
+            req.quote.save(function(err){
                 if (err)                                                    //Als er een error is...
                     res.status(500).send(err);
                 else{                                                       //Anders...
-                    res.json(req.book);                                     //Update nieuwe book...
+                    res.json(req.quote);                                     //Update nieuwe book...
                 }
             });
         })
 
         //Delete Item
         .delete(function(req,res){
-            req.book.remove(function(err){                                  //Welk boek ook gevonden is in onze middelware -> remove it.
+            req.quote.remove(function(err){                                  //Welk boek ook gevonden is in onze middelware -> remove it.
                 if(err)                                                     //Als boek deleten niet gelukt is...
                     req.status(500).send(err);
                 else{                                                       //Als boek deleten WEL gelukt is...                                         
@@ -122,7 +122,7 @@ let routes = function(Book){
             });
         });
         
-    return bookRouter;
+    return quoteRouter;
 };
 
 //exporteer routes functie

@@ -8,17 +8,17 @@ const express = require('express'),
 //Open connection to the db
 let db;
 if(process.env.ENV == 'Test')                                   //Als environment Test is....
-    db = mongoose.connect('mongodb://localhost/bookAPI_test');  //connection string is passed in. bookAPI is de db waar we mee connecteren.
-                                                                //Als bookAPI niet bestaat dan creeert hij het nu gewoon zelf.
+    db = mongoose.connect('mongodb://localhost/quoteAPI_test');  //connection string is passed in. quoteAPI is de db waar we mee connecteren.
+                                                                //Als quoteAPI niet bestaat dan creeert hij het nu gewoon zelf.
 else{
-    db = mongoose.connect('mongodb://localhost/bookAPI');
+    db = mongoose.connect('mongodb://localhost/quoteAPI');
 }
-let Book = require('./models/bookModel');                       //Roep Model file op
+let Quote = require('./models/quoteModel');                       //Roep Model file op
 let app = express();                                            //Execute Express()
 let port = 8000;                            //Als er geen process.env.port (staat in gulpfile.js) aanwezig is doe port 3000. 
 console.log("This is the chosen port:" + port);
 
-app.options("/api/books/", function (req, res, next) {
+app.options("/api/quotes/", function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')             //* Betekent alles
     res.header('Allow', 'GET,POST,OPTIONS')
     res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
@@ -26,7 +26,7 @@ app.options("/api/books/", function (req, res, next) {
     res.send(200);
 });
 
-app.options("/api/books/:bookId", function (req, res, next) {
+app.options("/api/quotes/:quoteId", function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');             //* Betekent alles
     res.header('Access-Control-Allow-Methods', 'GET,PUT, OPTIONS, DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -51,11 +51,11 @@ app.use(function(req, res, next){
     res.sendStatus(404);
 });
 
-//Functie oproep. hierbij geef je de model book ook mee aan de bookRoutes-file
-bookRouter = require('./Routes/bookRoutes')(Book);
+//Functie oproep. hierbij geef je de model quote ook mee aan de quoteRoutes-file
+quoteRouter = require('./Routes/quoteRoutes')(Quote);
 
 //Use Router instance to define all routes;
-app.use('/api/books', bookRouter);                             //Waar gaat de Api-Route zich bevinden? 
+app.use('/api/quotes', quoteRouter);                             //Waar gaat de Api-Route zich bevinden? 
 //app.use('/api/authors', authorRouter);                             
 
 //Setting up Handler for route-> localhost:8000

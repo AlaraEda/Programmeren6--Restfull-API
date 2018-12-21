@@ -4,7 +4,7 @@ let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 //Lay-out in Json hoe een boek eruit ziet
-let bookModel = new Schema({
+let quoteModel = new Schema({
     quote:{
         type: String
     },
@@ -17,5 +17,5 @@ let bookModel = new Schema({
                                                           // Haal hier de boolean weg zodat bas z'n checker hem leuk vind.
 });
 
-//Laden deze model naar Mongoose en noemen het Book en geven het de variabele bookModel mee.
-module.exports=mongoose.model('Book', bookModel);
+//Laden deze model naar Mongoose en noemen het Book en geven het de variabele quoteModel mee.
+module.exports=mongoose.model('Quote', quoteModel);

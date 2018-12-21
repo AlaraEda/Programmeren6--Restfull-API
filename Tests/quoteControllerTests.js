@@ -12,10 +12,10 @@ npm install gulp-mocha should sinon --save
 let should = require('should'),
     sinon = require('sinon');
 
-describe('Book Controller Test;', function(){
-    describe('Post', function(){                        //Describe post method of book controller
+describe('Quote Controller Test;', function(){
+    describe('Post', function(){                        //Describe post method of quote controller
         it('Should not allow an empty quote on post', function(){
-            let Book = function(book){
+            let Quote = function(quote){
                 this.save = function(){};
             }
             let req = {                                             //Request has to contain a body with data
@@ -30,9 +30,8 @@ describe('Book Controller Test;', function(){
                 send: sinon.spy()
             }
 
-
-            let bookController = require('../controllers/bookController')(Book);
-            bookController.post(req,res);                                           //We versturen een req zonder titel
+            let quoteController = require('../controllers/quoteController')(Quote);
+            quoteController.post(req,res);                                           //We versturen een req zonder titel
 
             //Check if status is called and with what. 
             res.status.calledWith(400).should.equal(true, 'Bad status ' + res.status.args[0][0]);

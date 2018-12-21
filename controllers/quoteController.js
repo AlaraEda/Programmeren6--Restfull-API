@@ -1,9 +1,9 @@
-let bookController = function (Book) {
+let quoteController = function (Quote) {
 
     //Post-functie
     let post = function (req, res) {
 
-        let book = new Book(req.body);                          //Create a new mangoose-instance of book-model
+        let quote = new Quote(req.body);                          //Create a new mangoose-instance of book-model
 
         if (!req.body.quote) {                                  //Als titel niet bestaat in req.body
 
@@ -11,12 +11,12 @@ let bookController = function (Book) {
             res.send('Quote is required.');
 
         } else {                                                  //Als titel WEL bestaat in req.body
-            book._links.self.href = 'http://' + req.headers.host + '/api/books/' + book._id
-            book._links.collection.href = 'http://' + req.headers.host + '/api/books/'
+            quote._links.self.href = 'http://' + req.headers.host + '/api/quotes/' + quote._id
+            quote._links.collection.href = 'http://' + req.headers.host + '/api/quotes/'
 
-            book.save();                                            //Saves Book made in Postman in mango-db
+            quote.save();                                            //Saves Book made in Postman in mango-db
             res.status(201);                                        //Send status 201 means created
-            res.send(book);                                         //Sending book back so book-id is available to the client who called our API.                                                    
+            res.send(quote);                                         //Sending book back so book-id is available to the client who called our API.                                                    
         }
     }
 
@@ -30,21 +30,21 @@ let bookController = function (Book) {
 
         //Book is onze model, vind het en doe een callback.
         //Zoek ondertussen ook naar de query in dat boek;
-        Book.find({})
+        Quote.find({})
 
             .skip((perPage * page) - perPage)
             .limit(limit)
 
-            .exec(function (err, books) {
-                Book.count().exec(function (err, count) {
+            .exec(function (err, quotes) {
+                Quote.count().exec(function (err, count) {
                     if (err) return next(err)
 
                     let maxPage = Math.ceil(count / limit)
 
                     let paginate = {
-                        items: books,
+                        items: quotes,
 
-                        _links: { self: { href: 'http://' + req.headers.host + '/api/books' } },
+                        _links: { self: { href: 'http://' + req.headers.host + '/api/quotes' } },
 
                         pagination: {
                             currentPage: page,
@@ -55,19 +55,19 @@ let bookController = function (Book) {
                             _links: {
                                 first: {
                                     page: 1,
-                                    href: 'http://' + req.headers.host + '/api/books/?start=1$limit=' + limit
+                                    href: 'http://' + req.headers.host + '/api/quotes/?start=1$limit=' + limit
                                 },
                                 last: {
                                     page: maxPage,
-                                    href: 'http://' + req.headers.host + '/api/books/?start=' + ((count - limit) + 1) + "&limit=" + limit
+                                    href: 'http://' + req.headers.host + '/api/quotes/?start=' + ((count - limit) + 1) + "&limit=" + limit
                                 },
                                 previous: {
                                     page: (page - 1),
-                                    href: 'http://' + req.headers.host + '/api/books/?start=' + (start - limit) + "&limit=" + limit
+                                    href: 'http://' + req.headers.host + '/api/quotes/?start=' + (start - limit) + "&limit=" + limit
                                 },
                                 next: {
                                     page: (page + 1),
-                                    href: 'http://' + req.headers.host + '/api/books/?start=' + (start + limit) + "&limit=" + limit
+                                    href: 'http://' + req.headers.host + '/api/quotes/?start=' + (start + limit) + "&limit=" + limit
                                 }
                             }
                         }
@@ -85,6 +85,6 @@ let bookController = function (Book) {
 }
 
 
-module.exports = bookController;
+module.exports = quoteController;
 
  
