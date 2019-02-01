@@ -7,12 +7,15 @@ const express = require('express'),
 
 //Open connection to the db
 let db;
+
+
 if(process.env.ENV == 'Test')                                   //Als environment Test is....
     db = mongoose.connect('mongodb://localhost/quoteAPI_test', { useNewUrlParser: true });  //connection string is passed in. quoteAPI is de db waar we mee connecteren.
                                                                 //Als quoteAPI niet bestaat dan creeert hij het nu gewoon zelf.
 else{
     db = mongoose.connect('mongodb://localhost/quoteAPI', { useNewUrlParser: true });
 }
+
 let Quote = require('./models/quoteModel');                     //Roep Model file op
 let app = express();                                            //Execute Express()
 let port = 8000;                            //Als er geen process.env.port (staat in gulpfile.js) aanwezig is doe port 3000. 
